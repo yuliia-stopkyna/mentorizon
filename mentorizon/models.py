@@ -1,13 +1,18 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models.functions import Lower
 
 
 class Sphere(models.Model):
-    name = models.CharField(max_length=150, unique=True)
+    name = models.CharField(max_length=150)
 
     class Meta:
         ordering = ["name"]
+        constraints = [
+            models.UniqueConstraint(Lower("name"), name="name_unique")
+        ]
 
     def __str__(self) -> str:
         return self.name
@@ -16,8 +21,9 @@ class Sphere(models.Model):
 class User(AbstractUser):
     mentor_sphere = models.ForeignKey(
         Sphere,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         null=True,
+        blank=True,
         related_name="users"
     )
     experience_description = models.TextField(null=True, blank=True)
@@ -80,7 +86,11 @@ class RatingVote(models.Model):
         on_delete=models.CASCADE,
         related_name="rating_votes"
     )
-    rate = models.DecimalField(max_digits=2, decimal_places=1)
+    rate = models.DecimalField(
+        max_digits=2,
+        decimal_places=1,
+        validators=[MinValueValidator(limit_value=0.0)]
+    )
 
     def __str__(self) -> str:
         return f"{self.rate} from {self.voter.username}"
