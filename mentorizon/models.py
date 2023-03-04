@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models.functions import Lower
 
@@ -86,10 +86,11 @@ class RatingVote(models.Model):
         on_delete=models.CASCADE,
         related_name="rating_votes"
     )
-    rate = models.DecimalField(
-        max_digits=2,
-        decimal_places=1,
-        validators=[MinValueValidator(limit_value=0.0)]
+    rate = models.IntegerField(
+        validators=[
+            MinValueValidator(limit_value=0),
+            MaxValueValidator(limit_value=5)
+        ]
     )
 
     def __str__(self) -> str:

@@ -1,0 +1,6 @@
+body {
+    background-color: #F9EAEE;
+}
+.mentor-card:hover, .meeting-card:hover {
+    transform: scale(1.03);
+}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1 class="text-center mt-2 mb-3">{{ meeting.topic }}</h1>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-10 col-md-8 m-1 mb-4 p-3
+      position-relative rounded shadow bg-white">
+        <p>{{ meeting.date }}</p>
+        <p>
+          by {{ meeting.mentor_session.mentor.first_name }}
+          {{ meeting.mentor_session.mentor.last_name }}
+        </p>
+        <p>{{ meeting.description }}</p>
+        {% if user.id != meeting.mentor_session.mentor.id %}
+          {% if user not in meeting.participants.all %}
+            {% if meeting.available_places and not full_book_error %}
+              <p>Available places: {{ meeting.available_places }}</p>
+              <a href="{% url 'mentorizon:book-meeting' pk=meeting.id %}" class="inline">
+                <button type="submit" class="btn btn-primary">Book</button>
+              </a>
+            {% else %}
+              <p>No available places.</p>
+            {% endif %}
+          {% else %}
+            <span class="badge bg-primary position-absolute top-0 end-0">
+              You are participant!
+            </span>
+            <p>Number of participants: {{ meeting.participants.count }}</p>
+            <a href="{{ meeting.link }}" target="_blank" class="text-decoration-none">
+              <button type="button" class="btn btn-success">Link</button>
+            </a>
+            <a href="{% url 'mentorizon:book-meeting' pk=meeting.id %}" class="inline">
+              <button type="submit" class="btn btn-danger">Unbook</button>
+            </a>
+          {% endif %}
+        {% else %}
+          <span class="badge bg-success position-absolute top-0 end-0">
+            You are mentor!
+          </span>
+          <p>Number of participants: {{ meeting.participants.count }}</p>
+          <a href="{% url 'mentorizon:meeting-delete' pk=meeting.id %}"
+             class="text-decoration-none">
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

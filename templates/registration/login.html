@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load bootstrap5 %}
+{% block content %}
+  <div class="container mt-5 p-5 rounded w-50" style="background-color:white;">
+    <div class="row text-center justify-content-md-center">
+      <h1>Login</h1>
+    </div>
+    <div class="row justify-content-md-center">
+      <form method="post" action="{% url 'login' %}" class="col">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+          <input type="submit" value="Login" class="btn btn-primary" />
+          <input type="hidden" name="next" value="{{ next }}" />
+      </form>
+    </div>
+  </div>
+{% endblock %}

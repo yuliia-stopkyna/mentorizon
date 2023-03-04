@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-5 m-5 p-3 bg-white rounded">
+        <h3>Are you sure you want to delete this meeting?</h3>
+        <p>{{ meeting.topic }}</p>
+        <form action="" method="post">
+          {% csrf_token %}
+          <input type="submit" value="Delete" class="btn btn-danger">
+          <button type="button" onclick="javascript:history.back()"
+                  class="btn btn-secondary inline">
+            Cancel
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

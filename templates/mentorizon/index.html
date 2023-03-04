@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Mentorizon</h1>
+  <ul>
+    <li>{{ num_mentors }} mentors</li>
+    <li>{{ num_meetings }} meeting{{ num_meetings|pluralize }}</li>
+    <li>{{ num_spheres }} spheres</li>
+  </ul>
+{% endblock %}
