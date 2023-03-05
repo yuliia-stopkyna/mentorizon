@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1 class="text-center mt-2 mb-3">Mentors</h1>
+  <h1 class="text-center my-4 display-3">Mentors</h1>
   <div class="container-fluid">
     <div class="row justify-content-center">
       {% for mentor in mentor_list %}
-        <div class="col-6 col-md-3 m-2 mb-4 p-3 rounded shadow bg-white mentor-card">
+        <div class="col-8 col-md-3 m-2 mb-4 p-3 rounded shadow bg-white mentor-card">
           <a href="{% url 'mentorizon:mentor-detail' pk=mentor.id %}"
           class="text-decoration-none text-color-none text-body">
             <p>{{ mentor.first_name }} {{ mentor.last_name }}</p>
@@ -14,6 +14,7 @@
               {{ mentor.years_of_experience }} year{{ mentor.years_of_experience|pluralize }}
               of experience
             </p>
+            <p>Upcoming meetings: {{ mentor.mentor_sessions.count}}</p>
           </a>
         </div>
        {% endfor %}

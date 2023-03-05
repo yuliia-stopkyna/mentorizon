@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1 class="text-center my-4 display-4">{{ user.first_name }} {{ user.last_name }}</h1>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-10 col-md-8 m-1 mb-4 p-3 rounded shadow bg-white">
+        <p>Rating: {{ user.avg_rating|default_if_none:"0" }}</p>
+        <p>Sphere: {{ user.mentor_sphere }}</p>
+        <p>
+          {{ user.years_of_experience }} year{{ user.years_of_experience|pluralize }}
+          of experience
+        </p>
+        <p>{{ user.experience_description }}</p>
+        <a href="{% url 'mentorizon:user-update' pk=user.id %}">
+          <button class="btn btn-primary">Update my info</button>
+        </a>
+      </div>
+    </div>
+    {% if mentor_meetings %}
+      <div class="row justify-content-center">
+        <h3 class="text-center display-6">You are the mentor in
+          {{ mentor_meetings.count }} upcoming meeting{{ mentor_meetings.count|pluralize }}
+        </h3>
+          {% for meeting in mentor_meetings %}
+            <div class="col-7 col-md-3 m-2 mb-4 p-3 g-0
+            meeting-card rounded shadow bg-white position-relative">
+             <a href="{% url 'mentorizon:meeting-detail' pk=meeting.id %}"
+                class="text-decoration-none text-color-none text-body">
+               <p class="fw-bold">{{ meeting.topic }}</p>
+               <p class="fst-italic">{{ meeting.date|date:"l, d F Y H:i" }}</p>
+               <p>{{ meeting.participants.count }}
+                   participant{{ meeting.participants.count|pluralize }}
+               </p>
+               <a href="{% url 'mentorizon:meeting-delete' pk=meeting.id %}"
+                  class="text-decoration-none">
+                 <button type="submit" class="btn btn-danger">Delete</button>
+               </a>
+                 <button type="button" class="btn btn-light">👁️</button>
+             </a>
+            </div>
+          {% endfor %}
+      </div>
+    {% endif %}
+    <div class="row justify-content-center">
+      <h3 class="text-center display-6">You participate in
+        {{ particip_meetings.count }} upcoming meeting{{ particip_meetings.count|pluralize }}
+      </h3>
+        {% for meeting in particip_meetings %}
+          <div class="col-7 col-md-3 m-2 mb-4 p-3 g-0
+          meeting-card rounded shadow bg-white position-relative">
+           <a href="{% url 'mentorizon:meeting-detail' pk=meeting.id %}"
+              class="text-decoration-none text-color-none text-body">
+             <p class="fw-bold">{{ meeting.topic }}</p>
+             <p class="fst-italic">{{ meeting.date|date:"l, d F Y H:i" }}</p>
+             <a href="{{ meeting.link }}" target="_blank" class="text-decoration-none">
+              <button type="button" class="btn btn-success">Link</button>
+             </a>
+             <a href="{% url 'mentorizon:book-meeting' pk=meeting.id %}"
+                class="text-decoration-none">
+               <button type="submit" class="btn btn-danger">Unbook</button>
+             </a>
+               <button type="button" class="btn btn-light">👁️</button>
+           </a>
+          </div>
+        {% endfor %}
+    </div>
+  </div>
+{% endblock %}

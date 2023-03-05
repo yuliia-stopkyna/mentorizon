@@ -1,10 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Mentorizon</h1>
-  <ul>
-    <li>{{ num_mentors }} mentors</li>
-    <li>{{ num_meetings }} meeting{{ num_meetings|pluralize }}</li>
-    <li>{{ num_spheres }} spheres</li>
-  </ul>
+  <h1 class="text-center m-5 display-1">Mentorizon</h1>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-8 m-2 p-2 py-5 col-md-3 bg-white">
+        <p class="text-center">{{ num_mentors }} mentors</p>
+      </div>
+      <div class="col-8 m-2 p-2 py-5 col-md-3 bg-white">
+        <p class="text-center">{{ num_meetings }} meeting{{ num_meetings|pluralize }}</p>
+      </div>
+      <div class="col-8 m-2 p-3 py-5 col-md-3 bg-white">
+        <p class="text-center">{{ num_spheres }} spheres</p>
+      </div>
+    </div>
+  </div>
 {% endblock %}

@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1 class="text-center mt-2 mb-3">Upcoming meetings</h1>
+  <h1 class="text-center my-4 display-3">Upcoming meetings</h1>
   <div class="container-fluid">
     <div class="row justify-content-center">
       {% for meeting in meeting_list %}
-        <div class="col-6 col-md-3 m-2 mb-4 p-3 rounded shadow bg-white
+        <div class="col-8 col-md-3 m-2 mb-4 p-3 rounded shadow bg-white
         position-relative mentor-card">
           <a href="{% url 'mentorizon:meeting-detail' pk=meeting.id %}"
           class="text-decoration-none text-color-none text-body">
@@ -28,7 +28,7 @@
              {% else %}
                <p>Number of participants: {{ meeting.participants.count }}</p>
                <span class="badge bg-primary position-absolute top-0 end-0">
-                 You are participant!
+                 You are a participant!
                </span>
                <a href="{% url 'mentorizon:book-meeting' pk=meeting.id %}"
                   class="text-decoration-none">
@@ -37,7 +37,7 @@
              {% endif %}
            {% else %}
              <span class="badge bg-success position-absolute top-0 end-0">
-                 You are mentor!
+                 You are the mentor!
                </span>
              <p>Number of participants: {{ meeting.participants.count }}</p>
              <a href="{% url 'mentorizon:meeting-delete' pk=meeting.id %}"

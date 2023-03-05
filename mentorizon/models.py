@@ -1,8 +1,11 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models.functions import Lower
+from django.urls import reverse
+from django.utils import timezone
 
 
 class Sphere(models.Model):
@@ -11,7 +14,10 @@ class Sphere(models.Model):
     class Meta:
         ordering = ["name"]
         constraints = [
-            models.UniqueConstraint(Lower("name"), name="name_unique")
+            models.UniqueConstraint(
+                Lower("name"),
+                name="name_unique",
+                violation_error_message="Sphere with this name already exists.")
         ]
 
     def __str__(self) -> str:
@@ -31,6 +37,14 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=150, blank=False)
     last_name = models.CharField(max_length=150, blank=False)
 
+    def get_absolute_url(self):
+        return reverse("mentorizon:user-detail", kwargs={"pk": self.pk})
+
+
+class MeetingManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(date__gt=timezone.now())
+
 
 class Meeting(models.Model):
     topic = models.CharField(max_length=150)
@@ -41,12 +55,20 @@ class Meeting(models.Model):
     )
     limit_of_participants = models.PositiveIntegerField()
     link = models.URLField()
+    objects = MeetingManager()
 
     class Meta:
         ordering = ["-date"]
 
     def __str__(self) -> str:
         return f"{self.topic} ({self.date})"
+
+
+class MentorSessionModel(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            meeting__date__gt=timezone.now()
+        )
 
 
 class MentorSession(models.Model):
@@ -60,6 +82,7 @@ class MentorSession(models.Model):
         on_delete=models.CASCADE,
         related_name="mentor_session"
     )
+    objects = MentorSessionModel()
 
     def __str__(self) -> str:
         return (

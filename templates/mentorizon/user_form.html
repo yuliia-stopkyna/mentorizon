@@ -1,17 +1,16 @@
 {% extends "registration/base_registration.html" %}
 {% load bootstrap5 %}
 {% block content %}
-  <div class="container mt-5 p-5 rounded shadow bg-white w-75">
-    <h1 class="text-center display-4">Sign In</h1>
+  <div class="container my-5 p-5 rounded shadow bg-white w-75">
+    <h1 class="text-center display-4">Create your account</h1>
     <div class="row justify-content-center">
       <div class="col">
-        <form method="post" action="{% url 'login' %}">
+        <form method="post" action="">
         {% csrf_token %}
         {% bootstrap_form form %}
-          <input type="submit" value="Login" class="btn btn-primary" />
+          <input type="submit" value="Sign up" class="btn btn-primary" />
           <input type="hidden" name="next" value="{{ next }}" />
         </form>
-        <p class="mt-2">Do not have an account yet? <a href="{% url 'mentorizon:user-create' %}">Sign up.</a></p>
       </div>
     </div>
   </div>

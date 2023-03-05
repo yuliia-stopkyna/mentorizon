@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% extends "registration/base_registration.html" %}
 {% block content %}
-  <div class="container">
-    <p>Logged out!</p>
+  <div class="container mt-5 p-5 rounded shadow bg-white w-75">
+    <h4 class="mb-5">You logged out!</h4>
 
-    <a href="{% url 'login'%}?next={% url 'mentorizon:index' %}">Click here to login again.</a>
+    <a href="{% url 'login'%}">Click here to login again.</a>
   </div>
 {% endblock %}
