@@ -63,6 +63,9 @@ class Meeting(models.Model):
     def __str__(self) -> str:
         return f"{self.topic} ({self.date})"
 
+    def get_absolute_url(self):
+        return reverse("mentorizon:meeting-detail", kwargs={"pk": self.pk})
+
 
 class MentorSessionModel(models.Manager):
     def get_queryset(self):
@@ -115,6 +118,14 @@ class RatingVote(models.Model):
             MaxValueValidator(limit_value=5)
         ]
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["rating", "voter"],
+                name="vote_unique",
+            )
+        ]
 
     def __str__(self) -> str:
         return f"{self.rate} from {self.voter.username}"

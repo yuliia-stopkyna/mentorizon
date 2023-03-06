@@ -1,14 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1 class="text-center my-4 display-4">{{ meeting.topic }}</h1>
   <div class="container-fluid">
     <div class="row justify-content-center">
-      <div class="col-10 col-md-8 m-1 mb-4 p-3
+      <div class="col-10 col-md-8 m-1 my-4 p-3
       position-relative rounded shadow bg-white">
+        <h1 class="my-3">{{ meeting.topic }}</h1>
+        <hr>
         <p class="fst-italic">{{ meeting.date|date:"l, d F Y H:i" }}</p>
         <p>
-          by {{ meeting.mentor_session.mentor.first_name }}
-          {{ meeting.mentor_session.mentor.last_name }}
+          by
+          <a href="{% url 'mentorizon:mentor-detail' pk=meeting.mentor_session.mentor.id %}"
+             class="text-decoration-none">
+            {{ meeting.mentor_session.mentor.first_name }}
+            {{ meeting.mentor_session.mentor.last_name }}
+          </a>
+
         </p>
         <p>{{ meeting.description }}</p>
         {% if user.id != meeting.mentor_session.mentor.id %}
@@ -38,10 +44,15 @@
             You are the mentor!
           </span>
           <p>Number of participants: {{ meeting.participants.count }}</p>
+          <a href="{% url 'mentorizon:meeting-update' pk=meeting.id %}"
+             class="text-decoration-none">
+            <button type="button" class="btn btn-primary">Update</button>
+          </a>
           <a href="{% url 'mentorizon:meeting-delete' pk=meeting.id %}"
              class="text-decoration-none">
             <button type="submit" class="btn btn-danger">Delete</button>
           </a>
+
         {% endif %}
       </div>
     </div>

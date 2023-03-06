@@ -1,10 +1,35 @@
 {% extends "base.html" %}
+{% load bootstrap5 %}
 {% block content %}
-  <h1 class="text-center my-4 display-4">{{ mentor.first_name }} {{ mentor.last_name }}</h1>
   <div class="container-fluid">
     <div class="row justify-content-center">
-      <div class="col-10 col-md-8 m-1 mb-4 p-3 rounded shadow bg-white">
-        <p>Rating: {{ mentor.avg_rating|default_if_none:"0" }}</p>
+      <div class="col-10 col-md-8 m-1 my-4 p-3 rounded shadow bg-white">
+        <h1 class="my-3">{{ mentor.first_name }} {{ mentor.last_name }}</h1>
+        <hr>
+        <div class="rate my-3">
+          <a href="{% url 'mentorizon:mentor-rate' pk=mentor.id rate=1 %}"
+             class="text-decoration-none">
+            <button type="submit" class="btn border rate-emoji">😠</button>
+          </a>
+          <a href="{% url 'mentorizon:mentor-rate' pk=mentor.id rate=2 %}"
+             class="text-decoration-none">
+            <button type="submit" class="btn border rate-emoji">☹️</button>
+          </a>
+          <a href="{% url 'mentorizon:mentor-rate' pk=mentor.id rate=3 %}"
+             class="text-decoration-none">
+            <button type="submit" class="btn border rate-emoji">😐</button>
+          </a>
+          <a href="{% url 'mentorizon:mentor-rate' pk=mentor.id rate=4 %}"
+             class="text-decoration-none">
+            <button type="submit" class="btn border rate-emoji">🙂</button>
+          </a>
+          <a href="{% url 'mentorizon:mentor-rate' pk=mentor.id rate=5 %}"
+             class="text-decoration-none">
+            <button type="submit" class="btn border rate-emoji">😍</button>
+          </a>
+        </div>
+
+        <p class="fw-bold">Rating: {{ mentor.avg_rating|default_if_none:"0" }}</p>
         <p>Sphere: {{ mentor.mentor_sphere }}</p>
         <p>
           {{ mentor.years_of_experience }} year{{ mentor.years_of_experience|pluralize }}
@@ -13,7 +38,8 @@
         <p>{{ mentor.experience_description }}</p>
       </div>
     </div>
-    <div class="row justify-content-center">
+    {% if meetings %}
+    <div class="row justify-content-center bg-white p-2">
       <h3 class="text-center display-6">
         {{ meetings.count }} upcoming meeting{{ meetings.count|pluralize }}
       </h3>
@@ -23,6 +49,7 @@
            <a href="{% url 'mentorizon:meeting-detail' pk=meeting.id %}"
               class="text-decoration-none text-color-none text-body">
              <p class="fw-bold">{{ meeting.topic }}</p>
+             <hr>
              <p class="fst-italic">{{ meeting.date|date:"l, d F Y H:i" }}</p>
              {% if user.id != meeting.mentor_session.mentor.id %}
                {% if user not in meeting.participants.all %}
@@ -49,10 +76,11 @@
                  <button type="submit" class="btn btn-danger">Delete</button>
                </a>
              {% endif %}
-               <button type="button" class="btn btn-light">👁️</button>
+               <button type="button" class="btn btn-light"><i class="bi bi-eye"></i></button>
            </a>
           </div>
         {% endfor %}
     </div>
+    {% endif %}
   </div>
 {% endblock %}

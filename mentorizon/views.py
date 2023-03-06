@@ -1,15 +1,22 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 from django.db.models import Avg, F, Count
 from django.db.models.functions import Round
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.views import generic
 from django.shortcuts import render, get_object_or_404
 
-from mentorizon.forms import UserCreateForm, UserUpdateForm, MeetingCreateForm, SphereCreateForm
-from mentorizon.models import Meeting, Sphere, MentorSession
+from mentorizon.forms import (
+    UserCreateForm,
+    UserUpdateForm,
+    MeetingCreateForm,
+    SphereCreateForm
+)
+from mentorizon.models import Meeting, Sphere, MentorSession, Rating, RatingVote
 
 
 @login_required
@@ -30,7 +37,10 @@ def index(request):
 class UserCreateView(generic.CreateView):
     model = get_user_model()
     form_class = UserCreateForm
-    success_url = reverse_lazy("login")
+
+    def get_success_url(self):
+        Rating.objects.create(mentor=self.object)
+        return reverse_lazy("login")
 
 
 class UserDetailView(LoginRequiredMixin, generic.DetailView):
@@ -138,30 +148,51 @@ def book_meeting_view(request, pk):
         return render(request, "mentorizon/meeting_detail.html", context=context)
 
 
+class MeetingCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Meeting
+    form_class = MeetingCreateForm
+
+    def form_valid(self, form):
+        meeting = Meeting.objects.create(**form.cleaned_data)
+        MentorSession.objects.create(
+            mentor=self.request.user,
+            meeting=meeting
+        )
+        return HttpResponseRedirect(meeting.get_absolute_url())
+
+
+class MeetingUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Meeting
+    form_class = MeetingCreateForm
+
+    def form_valid(self, form):
+        if form.cleaned_data["date"] <= timezone.now():
+            form.add_error(
+                "date",
+                ValidationError(
+                    message="Meeting date and time should be in future"
+                ))
+            return super().form_invalid(form)
+
+        if (
+            form.cleaned_data["limit_of_participants"] < self.object.participants.count()
+        ):
+            form.add_error(
+                "limit_of_participants",
+                ValidationError(
+                    message="Limit of participants can't be less than "
+                            "current number of participants: "
+                            f"{self.object.participants.count()}"
+                ))
+            return super().form_invalid(form)
+
+        return super().form_valid(form)
+
+
 class MeetingDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Meeting
     template_name = "mentorizon/meeting_confirm_delete.html"
     success_url = reverse_lazy("mentorizon:meeting-list")
-
-
-@login_required
-def meeting_create_view(request):
-    form = MeetingCreateForm()
-    if request.method == "GET":
-        return render(request, "mentorizon/meeting_create.html", {"form": form})
-    elif request.method == "POST":
-        form = MeetingCreateForm(request.POST)
-        if form.is_valid():
-            meeting = Meeting.objects.create(**form.cleaned_data)
-            MentorSession.objects.create(
-                mentor=request.user,
-                meeting=meeting
-            )
-            return HttpResponseRedirect(
-                reverse("mentorizon:meeting-detail", kwargs={"pk": meeting.id})
-            )
-
-        return render(request, "mentorizon/meeting_create.html", {"form": form})
 
 
 class SphereCreateView(LoginRequiredMixin, generic.CreateView):
@@ -171,3 +202,27 @@ class SphereCreateView(LoginRequiredMixin, generic.CreateView):
     def get_success_url(self):
         pk = self.request.user.id
         return reverse_lazy("mentorizon:user-update", kwargs={"pk": pk})
+
+
+@login_required
+def rate_mentor_view(request, pk, rate):
+    mentor = get_object_or_404(get_user_model(), pk=pk)
+    user = request.user
+    mentor_votes = RatingVote.objects.filter(
+        rating_id=mentor.rating.id
+    )
+    if user.id != mentor.id:
+        if mentor_votes.filter(voter_id=user.id):
+            mentor_votes.filter(voter_id=user.id).update(rate=rate)
+        else:
+            RatingVote.objects.create(
+                rating_id=mentor.rating.id,
+                voter=user,
+                rate=rate
+            )
+        return HttpResponseRedirect(
+            reverse_lazy("mentorizon:mentor-detail", args=[pk])
+        )
+    return HttpResponseRedirect(
+            reverse_lazy("mentorizon:mentor-detail", args=[pk])
+        )

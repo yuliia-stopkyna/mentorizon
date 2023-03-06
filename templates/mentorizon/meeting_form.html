@@ -3,14 +3,15 @@
 {% bootstrap_messages %}
 {% block content %}
   <div class="container my-5 p-5 rounded shadow bg-white w-75">
-    <h1 class="text-center display-4">Create meeting</h1>
+    <h1 class="text-center display-4">{{ meeting|yesno:"Update,Create" }} meeting</h1>
     <div class="row justify-content-center">
       <div class="col">
         {% if user.mentor_sphere is not None %}
         <form method="post" action="" novalidate>
         {% csrf_token %}
         {% bootstrap_form form %}
-          <input type="submit" value="Create" class="btn btn-primary" />
+          <input type="submit" value="{{ meeting|yesno:"Update,Create" }}"
+                 class="btn btn-primary" />
         </form>
         {% else %}
           <p class="text-danger">

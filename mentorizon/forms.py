@@ -2,7 +2,6 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
-from django.core.exceptions import NON_FIELD_ERRORS
 
 from mentorizon.models import Meeting, Sphere
 
@@ -44,7 +43,7 @@ class MeetingCreateForm(forms.ModelForm):
             "%d/%m/%Y %H:%M",
             "%d.%m.%Y %H:%M",
         ],
-        help_text="Enter in format: mm/dd/yy HH:MM"
+        help_text="Enter in format: YYYY-MM-DD HH:MM"
     )
 
     class Meta:

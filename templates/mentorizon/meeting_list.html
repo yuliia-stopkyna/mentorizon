@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1 class="text-center my-4 display-3">Upcoming meetings</h1>
+  <h1 class="text-center mb-4 p-3 display-4 bg-white border">Upcoming meetings</h1>
   <div class="container-fluid">
     <div class="row justify-content-center">
       {% for meeting in meeting_list %}
@@ -9,6 +9,7 @@
           <a href="{% url 'mentorizon:meeting-detail' pk=meeting.id %}"
           class="text-decoration-none text-color-none text-body">
             <p class="fw-bold">{{ meeting.topic }}</p>
+            <hr>
             <p class="fst-italic">{{ meeting.date|date:"l, d F Y H:i" }}</p>
             <p> by
               {{ meeting.mentor_session.mentor.first_name }}
@@ -46,7 +47,7 @@
              </a>
            {% endif %}
             <a href="{% url 'mentorizon:meeting-detail' pk=meeting.id %}">
-              <button type="button" class="btn btn-light">👁️</button>
+              <button type="button" class="btn btn-light"><i class="bi bi-eye"></i></button>
             </a>
 
           </a>
