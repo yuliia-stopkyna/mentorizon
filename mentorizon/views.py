@@ -153,6 +153,13 @@ class MeetingCreateView(LoginRequiredMixin, generic.CreateView):
     form_class = MeetingCreateForm
 
     def form_valid(self, form):
+        if form.cleaned_data["date"] <= timezone.now():
+            form.add_error(
+                "date",
+                ValidationError(
+                    message="Meeting date and time should be in future"
+                ))
+            return super().form_invalid(form)
         meeting = Meeting.objects.create(**form.cleaned_data)
         MentorSession.objects.create(
             mentor=self.request.user,
