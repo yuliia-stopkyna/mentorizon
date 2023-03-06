@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
   <h1 class="text-center mb-4 p-3 display-4 bg-white border">Upcoming meetings</h1>
+  {% include "includes/pagination.html" %}
   <div class="container-fluid">
     <div class="row justify-content-center">
       {% for meeting in meeting_list %}
@@ -41,6 +42,10 @@
                  You are the mentor!
                </span>
              <p>Number of participants: {{ meeting.participants.count }}</p>
+             <a href="{% url 'mentorizon:meeting-update' pk=meeting.id %}"
+                class="text-decoration-none">
+               <button type="button" class="btn btn-primary">Update</button>
+             </a>
              <a href="{% url 'mentorizon:meeting-delete' pk=meeting.id %}"
                 class="text-decoration-none">
                <button type="submit" class="btn btn-danger">Delete</button>

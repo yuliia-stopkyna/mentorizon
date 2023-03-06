@@ -78,6 +78,7 @@ class MentorListView(LoginRequiredMixin, generic.ListView):
     ).annotate(avg_rating=Round(Avg("rating__rating_votes__rate"), 1))
     template_name = "mentorizon/mentor_list.html"
     context_object_name = "mentor_list"
+    paginate_by = 6
 
 
 class MentorDetailView(LoginRequiredMixin, generic.DetailView):
@@ -109,6 +110,7 @@ class MeetingListView(LoginRequiredMixin, generic.ListView):
     ).prefetch_related("participants").annotate(
         available_places=F("limit_of_participants") - Count("participants")
     )
+    paginate_by = 6
 
 
 class MeetingDetailView(LoginRequiredMixin, generic.DetailView):

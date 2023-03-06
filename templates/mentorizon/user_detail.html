@@ -34,6 +34,10 @@
                <p>{{ meeting.participants.count }}
                    participant{{ meeting.participants.count|pluralize }}
                </p>
+               <a href="{% url 'mentorizon:meeting-update' pk=meeting.id %}"
+                  class="text-decoration-none">
+                 <button type="button" class="btn btn-primary">Update</button>
+               </a>
                <a href="{% url 'mentorizon:meeting-delete' pk=meeting.id %}"
                   class="text-decoration-none">
                  <button type="submit" class="btn btn-danger">Delete</button>
