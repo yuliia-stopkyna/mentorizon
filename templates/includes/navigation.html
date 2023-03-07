@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-lg bg-body shadow-sm navbar-light sticky-top">
   <div class="container">
-    <a class="navbar-brand" href="{% url 'mentorizon:index' %}">Mentorizon</a>
+    <a class="navbar-brand fs-4" href="{% url 'mentorizon:index' %}">Mentorizon</a>
     <div class="dropdown">
       <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown">
-        My account
+        <i class="bi bi-person-circle fs-4"></i>
       </button>
       <ul class="dropdown-menu">
         <li><a class="dropdown-item" href="{% url 'mentorizon:user-detail' pk=user.id %}">Profile</a></li>

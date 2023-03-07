@@ -278,3 +278,11 @@ def rate_mentor_view(request, pk, rate):
     return HttpResponseRedirect(
             reverse_lazy("mentorizon:mentor-detail", args=[pk])
         )
+
+
+def error_404_view(request, exception):
+    return render(request, "404.html")
+
+
+def error_500_view(request):
+    return render(request, "500.html")
