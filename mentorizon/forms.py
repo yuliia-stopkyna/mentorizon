@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
+from django.db.models.functions import Lower
 
 from mentorizon.models import Meeting, Sphere
 
@@ -33,6 +34,15 @@ class UserUpdateForm(UserChangeForm):
         )
 
 
+class MentorSearchForm(forms.Form):
+    last_name = forms.CharField(
+        max_length=150,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by last name..."})
+    )
+
+
 class MeetingCreateForm(forms.ModelForm):
     date = forms.DateTimeField(
         label="Date and time",
@@ -57,8 +67,31 @@ class MeetingCreateForm(forms.ModelForm):
         )
 
 
+class MeetingSearchForm(forms.Form):
+    topic = forms.CharField(
+        max_length=150,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by topic..."})
+    )
+
+
 class SphereCreateForm(forms.ModelForm):
 
     class Meta:
         model = Sphere
         fields = "__all__"
+
+
+class SphereFilterForm(forms.ModelForm):
+    name = forms.ModelChoiceField(
+        queryset=Sphere.objects.all(),
+        to_field_name="name",
+        required=False,
+        label="",
+        widget=forms.Select()
+    )
+
+    class Meta:
+        model = Sphere
+        fields = ("name",)

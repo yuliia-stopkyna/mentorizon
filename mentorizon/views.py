@@ -14,7 +14,10 @@ from mentorizon.forms import (
     UserCreateForm,
     UserUpdateForm,
     MeetingCreateForm,
-    SphereCreateForm
+    MeetingSearchForm,
+    MentorSearchForm,
+    SphereCreateForm,
+    SphereFilterForm
 )
 from mentorizon.models import Meeting, Sphere, MentorSession, Rating, RatingVote
 
@@ -75,10 +78,34 @@ class MentorListView(LoginRequiredMixin, generic.ListView):
         mentor_sphere__isnull=False
     ).prefetch_related(
         "mentor_sessions", "rating"
-    ).annotate(avg_rating=Round(Avg("rating__rating_votes__rate"), 1))
+    ).annotate(
+        avg_rating=Round(Avg("rating__rating_votes__rate"), 1)
+    ).order_by("last_name")
     template_name = "mentorizon/mentor_list.html"
     context_object_name = "mentor_list"
     paginate_by = 6
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_name = self.request.GET.get("last_name", "")
+        context["search_form"] = MentorSearchForm(
+            initial={"last_name": last_name}
+        )
+        context["filter_form"] = SphereFilterForm()
+        return context
+
+    def get_queryset(self):
+        search_form = MentorSearchForm(self.request.GET)
+        sphere_name = self.request.GET.get("name")
+        if search_form.is_valid():
+            self.queryset = self.queryset.filter(
+                last_name__icontains=search_form.cleaned_data["last_name"]
+            )
+        if sphere_name:
+            self.queryset = self.queryset.filter(
+                mentor_sphere__name=sphere_name
+            )
+        return self.queryset
 
 
 class MentorDetailView(LoginRequiredMixin, generic.DetailView):
@@ -109,8 +136,24 @@ class MeetingListView(LoginRequiredMixin, generic.ListView):
         "mentor_session"
     ).prefetch_related("participants").annotate(
         available_places=F("limit_of_participants") - Count("participants")
-    )
+    ).order_by("date")
     paginate_by = 6
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        topic = self.request.GET.get("topic", "")
+        context["search_form"] = MeetingSearchForm(
+            initial={"topic": topic}
+        )
+        return context
+
+    def get_queryset(self):
+        form = MeetingSearchForm(self.request.GET)
+        if form.is_valid():
+            return self.queryset.filter(
+                topic__icontains=form.cleaned_data["topic"]
+            )
+        return self.queryset
 
 
 class MeetingDetailView(LoginRequiredMixin, generic.DetailView):

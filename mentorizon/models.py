@@ -22,6 +22,10 @@ class Sphere(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    def save(self, *args, **kwargs):
+        self.name = self.name.capitalize()
+        return super(Sphere, self).save(*args, **kwargs)
+
 
 class User(AbstractUser):
     mentor_sphere = models.ForeignKey(

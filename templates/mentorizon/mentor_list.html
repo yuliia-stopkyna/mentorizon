@@ -1,6 +1,22 @@
 {% extends "base.html" %}
+{% load bootstrap5 %}
 {% block content %}
-  <h1 class="text-center mb-4 p-3 display-4 bg-white border">Mentors</h1>
+  <div class="container-fluid bg-white mb-4 gx-0">
+    <div class="row d-flex m-auto justify-content-between justify-content-md-center">
+      <h1 class="col-3 col-lg-3 display-4">Mentors</h1>
+      <form action="" method="get" class="col-4 col-lg-3 d-md-flex my-auto">
+        {% bootstrap_field search_form.last_name layout="inline" %}
+          <button type="submit" class="btn border">
+            <i class="bi bi-search"></i>
+          </button>
+      </form>
+      <form action="" method="get" class="col-4 col-lg-3 d-md-flex my-auto">
+        {% bootstrap_form filter_form layout="inline" %}
+        <button type="submit" class="btn border">Sphere</button>
+      </form>
+    </div>
+  </div>
+
   {% include "includes/pagination.html" %}
   <div class="container-fluid">
     <div class="row justify-content-center">

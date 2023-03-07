@@ -1,6 +1,18 @@
 {% extends "base.html" %}
+{% load bootstrap5 %}
 {% block content %}
-  <h1 class="text-center mb-4 p-3 display-4 bg-white border">Upcoming meetings</h1>
+  <div class="container-fluid bg-white mb-4 py-2">
+    <div class="row justify-content-center">
+      <h1 class="col-5 display-4">Upcoming meetings</h1>
+      <form action="" method="get" class="col-5 col-md-3 d-flex my-auto">
+        {% bootstrap_field search_form.topic layout="inline" %}
+          <button type="submit" class="btn border">
+            <i class="bi bi-search"></i>
+          </button>
+      </form>
+    </div>
+  </div>
+
   {% include "includes/pagination.html" %}
   <div class="container-fluid">
     <div class="row justify-content-center">
@@ -16,6 +28,7 @@
               {{ meeting.mentor_session.mentor.first_name }}
               {{ meeting.mentor_session.mentor.last_name }}
             </p>
+            <p>Sphere: {{ meeting.mentor_session.mentor.mentor_sphere }}</p>
            {% if user.id != meeting.mentor_session.mentor.id  %}
              {% if user not in meeting.participants.all %}
                 {% if meeting.available_places %}
