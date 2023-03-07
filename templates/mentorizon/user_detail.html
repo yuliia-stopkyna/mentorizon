@@ -8,7 +8,7 @@
         <hr>
         <p class="fw-bold">Rating: {{ user.avg_rating|default_if_none:"0" }}</p>
         <p>Sphere: {{ user.mentor_sphere }}</p>
-        <p>
+        <p class="mb-5">
           {{ user.years_of_experience }} year{{ user.years_of_experience|pluralize }}
           of experience
         </p>

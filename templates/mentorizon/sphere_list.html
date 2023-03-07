@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1 class="text-center mb-4 p-3 display-4 bg-white border">Spheres</h1>
+  {% include "includes/pagination.html" %}
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      {% for sphere in sphere_list %}
+        <div class="col-8 col-lg-3 m-2 mb-4 p-3 rounded shadow bg-white
+        position-relative">
+          <p class="fw-bold">{{ sphere.name }}</p>
+          <hr>
+          <p>Mentors: {{ sphere.users.count }}</p>
+          <a href="{% url 'mentorizon:mentor-list' %}?name={{ sphere.name }}">
+            <button type="button" class="btn btn-light"><i class="bi bi-eye"></i></button>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

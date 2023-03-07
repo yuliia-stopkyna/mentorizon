@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
-from django.db.models import Avg, F, Count
+from django.db.models import Avg, F, Count, Q
 from django.db.models.functions import Round
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -112,7 +112,7 @@ class MentorDetailView(LoginRequiredMixin, generic.DetailView):
     model = get_user_model()
     queryset = get_user_model().objects.filter(
         mentor_sphere__isnull=False
-    ).prefetch_related(
+    ).select_related("mentor_sphere").prefetch_related(
         "mentor_sessions", "rating"
     ).annotate(avg_rating=Round(Avg("rating__rating_votes__rate"), 1))
     template_name = "mentorizon/mentor_detail.html"
@@ -260,6 +260,14 @@ class SphereCreateView(LoginRequiredMixin, generic.CreateView):
     def get_success_url(self):
         pk = self.request.user.id
         return reverse_lazy("mentorizon:user-update", kwargs={"pk": pk})
+
+
+class SphereListView(LoginRequiredMixin, generic.ListView):
+    model = Sphere
+    queryset = Sphere.objects.prefetch_related(
+        "users"
+    )
+    paginate_by = 6
 
 
 @login_required

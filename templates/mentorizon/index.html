@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="mentorizon-main m-4 text-center display-1 text-white fw-bold">
+  <div class="mentorizon-main m-4 text-center display-1 fw-bold">
     <span class="letter">M</span>
     <span class="letter">e</span>
     <span class="letter">n</span>
@@ -13,7 +13,7 @@
     <span class="letter">o</span>
     <span class="letter">n</span>
   </div>
-  <p class="text-center text-white mb-4 display-6">
+  <p class="text-center mb-4 mx-2 display-6">
     The place where you can be both a mentor and a mentee.
     <br>
     Broaden your horizons.
@@ -21,16 +21,22 @@
   <div class="container-fluid">
     <div class="row justify-content-center">
       <div class="col-8 m-2 p-2 py-5 col-md-3 bg-white rounded shadow">
-        <p class="text-center fw-bold display-1 text-primary">{{ num_mentors }}</p>
+        <a href="{% url 'mentorizon:mentor-list' %}" class="text-decoration-none">
+          <p class="text-center fw-bold display-1 text-primary">{{ num_mentors }}</p>
         <p class="text-center display-6">mentors</p>
+        </a>
       </div>
       <div class="col-8 m-2 p-2 py-5 col-md-3 bg-white rounded shadow">
-        <p class="text-center fw-bold display-1 text-primary">{{ num_meetings }}</p>
-        <p class="text-center display-6">meeting{{ num_meetings|pluralize }}</p>
+        <a href="{%  url 'mentorizon:meeting-list' %}" class="text-decoration-none">
+          <p class="text-center fw-bold display-1 text-primary">{{ num_meetings }}</p>
+          <p class="text-center display-6">meeting{{ num_meetings|pluralize }}</p>
+        </a>
       </div>
       <div class="col-8 m-2 p-3 py-5 col-md-3 bg-white rounded shadow">
-        <p class="text-center fw-bold display-1 text-primary">{{ num_spheres }}</p>
-        <p class="text-center display-6">spheres</p>
+        <a href="{% url 'mentorizon:sphere-list' %}" class="text-decoration-none">
+          <p class="text-center fw-bold display-1 text-primary">{{ num_spheres }}</p>
+          <p class="text-center display-6">spheres</p>
+        </a>
       </div>
     </div>
   </div>

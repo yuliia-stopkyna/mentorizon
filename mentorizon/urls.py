@@ -14,7 +14,7 @@ from mentorizon.views import (
     MeetingCreateView,
     MeetingUpdateView,
     SphereCreateView,
-    rate_mentor_view,
+    rate_mentor_view, SphereListView,
 )
 
 urlpatterns = [
@@ -31,7 +31,8 @@ urlpatterns = [
     path("meeting/<int:pk>/update/", MeetingUpdateView.as_view(), name="meeting-update"),
     path("meeting/<int:pk>/delete/", MeetingDeleteView.as_view(), name="meeting-delete"),
     path("sphere/create/", SphereCreateView.as_view(), name="sphere-create"),
-    path("mentor/<int:pk>/rate/<int:rate>", rate_mentor_view, name="mentor-rate")
+    path("mentor/<int:pk>/rate/<int:rate>", rate_mentor_view, name="mentor-rate"),
+    path("spheres/", SphereListView.as_view(), name="sphere-list")
 ]
 
 app_name = "mentorizon"

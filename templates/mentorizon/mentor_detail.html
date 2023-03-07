@@ -31,7 +31,7 @@
 
         <p class="fw-bold">Rating: {{ mentor.avg_rating|default_if_none:"0" }}</p>
         <p>Sphere: {{ mentor.mentor_sphere }}</p>
-        <p>
+        <p class="mb-5">
           {{ mentor.years_of_experience }} year{{ mentor.years_of_experience|pluralize }}
           of experience
         </p>

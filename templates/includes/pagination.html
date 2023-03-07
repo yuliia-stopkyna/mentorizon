@@ -1,13 +1,15 @@
 {% if is_paginated %}
     {% if page_obj.has_previous %}
       <a href="?page={{ page_obj.previous_page_number }}" class="page-link">
-        <i class="bi bi-arrow-left-circle-fill display-3 position-fixed top-50 start-0"></i>
+        <i class="bi bi-arrow-left-circle-fill display-3 position-fixed top-50 start-0 mx-1">
+        </i>
       </a>
     {% endif %}
 
     {% if page_obj.has_next %}
       <a href="?page={{ page_obj.next_page_number }}" class="page-link">
-        <i class="bi bi-arrow-right-circle-fill display-3 position-fixed top-50 end-0"></i>
+        <i class="bi bi-arrow-right-circle-fill display-3 position-fixed top-50 end-0 mx-1">
+        </i>
       </a>
     {% endif %}
 {% endif %}
