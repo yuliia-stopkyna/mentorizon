@@ -1,14 +1,18 @@
 {% extends "base.html" %}
 {% load bootstrap5 %}
 {% block content %}
-  <div class="container-fluid bg-white mb-4 py-2">
-    <div class="row m-auto justify-content-between justify-content-md-center">
-      <h1 class="col-4 col-md-5 display-4">Upcoming meetings</h1>
-      <form action="" method="get" class="col-4 col-md-3 d-md-flex my-auto">
+  <div class="container-fluid bg-white mb-4 gx-0">
+    <div class="row d-flex m-auto justify-content-between justify-content-md-center">
+      <h1 class="col-4 col-lg-3 display-4 g-lg-0 g-1">Meetings</h1>
+      <form action="" method="get" class="col-4 col-lg-3 d-md-flex my-auto">
         {% bootstrap_field search_form.topic layout="inline" %}
           <button type="submit" class="btn border">
             <i class="bi bi-search"></i>
           </button>
+      </form>
+      <form action="" method="get" class="col-4 col-lg-3 d-md-flex my-auto">
+        {% bootstrap_form filter_form layout="inline" %}
+        <button type="submit" class="btn border">Sphere</button>
       </form>
     </div>
   </div>
@@ -17,7 +21,7 @@
   <div class="container-fluid">
     <div class="row justify-content-center">
       {% for meeting in meeting_list %}
-        <div class="col-7 col-lg-3 m-2 mb-4 p-3 rounded shadow bg-white
+        <div class="col-8 col-lg-3 m-2 mb-4 p-3 rounded shadow bg-white
         position-relative mentor-card">
           <a href="{% url 'mentorizon:meeting-detail' pk=meeting.id %}"
           class="text-decoration-none text-color-none text-body">

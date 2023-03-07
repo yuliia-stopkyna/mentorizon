@@ -34,6 +34,9 @@
               of experience
             </p>
             <p>Upcoming meetings: {{ mentor.mentor_sessions.count}}</p>
+            <a href="{% url 'mentorizon:mentor-detail' pk=mentor.id %}">
+              <button type="button" class="btn btn-light"><i class="bi bi-eye"></i></button>
+            </a>
           </a>
         </div>
        {% endfor %}

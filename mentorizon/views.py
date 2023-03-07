@@ -145,13 +145,19 @@ class MeetingListView(LoginRequiredMixin, generic.ListView):
         context["search_form"] = MeetingSearchForm(
             initial={"topic": topic}
         )
+        context["filter_form"] = SphereFilterForm()
         return context
 
     def get_queryset(self):
-        form = MeetingSearchForm(self.request.GET)
-        if form.is_valid():
-            return self.queryset.filter(
-                topic__icontains=form.cleaned_data["topic"]
+        search_form = MeetingSearchForm(self.request.GET)
+        sphere_name = self.request.GET.get("name")
+        if search_form .is_valid():
+            self.queryset = self.queryset.filter(
+                topic__icontains=search_form.cleaned_data["topic"]
+            )
+        if sphere_name:
+            self.queryset = self.queryset.filter(
+                mentor_session__mentor__mentor_sphere__name=sphere_name
             )
         return self.queryset
 
