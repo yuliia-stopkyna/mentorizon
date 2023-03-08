@@ -1,7 +1,9 @@
 body {
+    background-image: url("../img/abstract.jpg");
+    background-repeat: repeat;
     background-color: #F7F7F7;
 }
-.mentor-card:hover, .meeting-card:hover {
+.mentor-card:hover, .meeting-card:hover, .sphere-card:hover, .index-card:hover {
     transform: scale(1.03);
 }
 button.rate-emoji:hover {

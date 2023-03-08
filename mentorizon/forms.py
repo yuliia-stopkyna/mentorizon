@@ -83,6 +83,15 @@ class SphereCreateForm(forms.ModelForm):
         fields = "__all__"
 
 
+class SphereSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=150,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by name..."})
+    )
+
+
 class SphereFilterForm(forms.ModelForm):
     name = forms.ModelChoiceField(
         queryset=Sphere.objects.all(),

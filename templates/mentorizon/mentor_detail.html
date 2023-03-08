@@ -54,10 +54,12 @@
              {% if user.id != meeting.mentor_session.mentor.id %}
                {% if user not in meeting.participants.all %}
                  <p>Available places: {{ meeting.available_places }}</p>
-                 <a href="{% url 'mentorizon:book-meeting' pk=meeting.id %}"
-                    class="text-decoration-none">
-                   <button type="submit" class="btn btn-primary">Book</button>
-                 </a>
+                 {% if meeting.available_places %}
+                   <a href="{% url 'mentorizon:book-meeting' pk=meeting.id %}"
+                      class="text-decoration-none">
+                     <button type="submit" class="btn btn-primary">Book</button>
+                   </a>
+                 {% endif %}
                {% else %}
                  <span class="badge bg-primary position-absolute top-0 end-0">
                     You are a participant!

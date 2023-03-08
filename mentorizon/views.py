@@ -17,7 +17,7 @@ from mentorizon.forms import (
     MeetingSearchForm,
     MentorSearchForm,
     SphereCreateForm,
-    SphereFilterForm
+    SphereFilterForm, SphereSearchForm
 )
 from mentorizon.models import Meeting, Sphere, MentorSession, Rating, RatingVote
 
@@ -191,7 +191,7 @@ def book_meeting_view(request, pk):
                 kwargs={"pk": pk}
             ))
 
-        full_book_error = "Unfortunately, there are no available places"
+        full_book_error = "Unfortunately, there are no available places."
         context = {
             "meeting": meeting,
             "full_book_error": full_book_error
@@ -268,6 +268,22 @@ class SphereListView(LoginRequiredMixin, generic.ListView):
         "users"
     )
     paginate_by = 6
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = SphereSearchForm(
+            initial={"name": name}
+        )
+        return context
+
+    def get_queryset(self):
+        search_form = SphereSearchForm(self.request.GET)
+        if search_form .is_valid():
+            return self.queryset.filter(
+                name__icontains=search_form.cleaned_data["name"]
+            )
+        return self.queryset
 
 
 @login_required
