@@ -95,6 +95,7 @@ class SphereSearchForm(forms.Form):
 class SphereFilterForm(forms.ModelForm):
     name = forms.ModelChoiceField(
         queryset=Sphere.objects.all(),
+        empty_label="Sphere",
         to_field_name="name",
         required=False,
         label="",

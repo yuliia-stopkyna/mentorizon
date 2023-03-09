@@ -1,23 +1,11 @@
 body {
-    background-image: url("../img/abstract.jpg");
-    background-repeat: repeat;
+    background-image: url("../img/abstract2.jpg");
     background-color: #F7F7F7;
+    background-size: cover;
 }
 .mentor-card:hover, .meeting-card:hover, .sphere-card:hover, .index-card:hover {
     transform: scale(1.03);
 }
 button.rate-emoji:hover {
     background-color: #E6E0E0;
-}
-.mentorizon-main {
-    user-select: none !important;
-}
-.mentorizon-main>span {
-    display:inline-block;
-    padding:0;
-    margin: 0 -15px 0 0;
-}
-.mentorizon-main>span:hover {
-    color: #4460EE;
-    cursor: pointer;
 }
