@@ -8,18 +8,19 @@
         <hr>
         <p class="fw-bold">Rating: {{ user.avg_rating|default_if_none:"0" }}</p>
         <p>Sphere: {{ user.mentor_sphere }}</p>
-        <p class="mb-5">
+        <p class="mb-3">
           {{ user.years_of_experience }} year{{ user.years_of_experience|pluralize }}
           of experience
         </p>
-        <p>{{ user.experience_description }}</p>
+        <i class="bi bi-brightness-alt-high fs-4"></i>
+        <p class="mb-4">{{ user.experience_description }}</p>
         <a href="{% url 'mentorizon:user-update' pk=user.id %}">
           <button class="btn btn-primary">Update my info</button>
         </a>
       </div>
     </div>
     {% if mentor_meetings %}
-      <div class="row justify-content-center bg-white p-3 my-2">
+      <div class="row justify-content-center bg-white p-3 my-3">
         <h3 class="text-center display-6">You are the mentor in
           {{ mentor_meetings.count }} upcoming meeting{{ mentor_meetings.count|pluralize }}:
         </h3>
@@ -49,7 +50,7 @@
       </div>
     {% endif %}
     {% if particip_meetings %}
-      <div class="row justify-content-center bg-white p-3 mb-2">
+      <div class="row justify-content-center bg-white p-3 mb-3">
         <h3 class="text-center display-6">You participate in
           {{ particip_meetings.count }} upcoming meeting{{ particip_meetings.count|pluralize }}:
         </h3>

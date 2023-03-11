@@ -14,7 +14,8 @@ from mentorizon.views import (
     MeetingCreateView,
     MeetingUpdateView,
     SphereCreateView,
-    rate_mentor_view, SphereListView,
+    SphereListView,
+    rate_mentor_view,
 )
 
 urlpatterns = [

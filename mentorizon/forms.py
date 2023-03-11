@@ -2,7 +2,9 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
-from django.db.models.functions import Lower
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
+from django.utils import timezone
 
 from mentorizon.models import Meeting, Sphere
 
@@ -53,7 +55,11 @@ class MeetingCreateForm(forms.ModelForm):
             "%d/%m/%Y %H:%M",
             "%d.%m.%Y %H:%M",
         ],
-        help_text="Enter in format: YYYY-MM-DD HH:MM"
+        help_text="Enter in format: YYYY-MM-DD HH:MM",
+        validators=[MinValueValidator(
+            limit_value=timezone.now() + timezone.timedelta(minutes=30),
+            message="Meeting date and time should be in future"
+        )]
     )
 
     class Meta:
@@ -65,6 +71,18 @@ class MeetingCreateForm(forms.ModelForm):
             "limit_of_participants",
             "link"
         )
+
+
+class MeetingUpdateForm(MeetingCreateForm):
+
+    def clean_limit_of_participants(self):
+        data = self.cleaned_data["limit_of_participants"]
+        current_participants = self.instance.participants.count()
+        if data < current_participants:
+            raise ValidationError("Limit of participants can't be less than "
+                                  "current number of participants: "
+                                  f"{current_participants}")
+        return data
 
 
 class MeetingSearchForm(forms.Form):

@@ -1,12 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ValidationError
-from django.db.models import Avg, F, Count, Q
+from django.db.models import Avg, F, Count
 from django.db.models.functions import Round
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from django.utils import timezone
 from django.views import generic
 from django.shortcuts import render, get_object_or_404
 
@@ -14,12 +12,19 @@ from mentorizon.forms import (
     UserCreateForm,
     UserUpdateForm,
     MeetingCreateForm,
+    MeetingUpdateForm,
     MeetingSearchForm,
     MentorSearchForm,
     SphereCreateForm,
-    SphereFilterForm, SphereSearchForm
+    SphereFilterForm,
+    SphereSearchForm
 )
-from mentorizon.models import Meeting, Sphere, MentorSession, Rating, RatingVote
+from mentorizon.models import (
+    Meeting,
+    Sphere,
+    MentorSession,
+    RatingVote
+)
 
 
 @login_required
@@ -40,10 +45,7 @@ def index(request):
 class UserCreateView(generic.CreateView):
     model = get_user_model()
     form_class = UserCreateForm
-
-    def get_success_url(self):
-        Rating.objects.create(mentor=self.object)
-        return reverse_lazy("login")
+    success_url = reverse_lazy("login")
 
 
 class UserDetailView(LoginRequiredMixin, generic.DetailView):
@@ -54,7 +56,7 @@ class UserDetailView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        obj = super().get_object()
+        obj = self.get_object()
         mentor_meetings = Meeting.objects.select_related("mentor_session").filter(
             mentor_session__mentor_id=obj.id
         )
@@ -120,7 +122,7 @@ class MentorDetailView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        obj = super().get_object()
+        obj = self.get_object()
         meetings = Meeting.objects.select_related("mentor_session").filter(
             mentor_session__mentor_id=obj.id
         ).annotate(
@@ -204,13 +206,6 @@ class MeetingCreateView(LoginRequiredMixin, generic.CreateView):
     form_class = MeetingCreateForm
 
     def form_valid(self, form):
-        if form.cleaned_data["date"] <= timezone.now():
-            form.add_error(
-                "date",
-                ValidationError(
-                    message="Meeting date and time should be in future"
-                ))
-            return super().form_invalid(form)
         meeting = Meeting.objects.create(**form.cleaned_data)
         MentorSession.objects.create(
             mentor=self.request.user,
@@ -221,30 +216,7 @@ class MeetingCreateView(LoginRequiredMixin, generic.CreateView):
 
 class MeetingUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Meeting
-    form_class = MeetingCreateForm
-
-    def form_valid(self, form):
-        if form.cleaned_data["date"] <= timezone.now():
-            form.add_error(
-                "date",
-                ValidationError(
-                    message="Meeting date and time should be in future"
-                ))
-            return super().form_invalid(form)
-
-        if (
-            form.cleaned_data["limit_of_participants"] < self.object.participants.count()
-        ):
-            form.add_error(
-                "limit_of_participants",
-                ValidationError(
-                    message="Limit of participants can't be less than "
-                            "current number of participants: "
-                            f"{self.object.participants.count()}"
-                ))
-            return super().form_invalid(form)
-
-        return super().form_valid(form)
+    form_class = MeetingUpdateForm
 
 
 class MeetingDeleteView(LoginRequiredMixin, generic.DeleteView):

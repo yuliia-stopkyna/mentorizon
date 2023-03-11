@@ -43,6 +43,12 @@ class User(AbstractUser):
     def get_absolute_url(self):
         return reverse("mentorizon:user-detail", kwargs={"pk": self.pk})
 
+    def save(self, *args, **kwargs):
+        not_existing = self.pk is None
+        super().save(*args, **kwargs)
+        if not_existing:
+            Rating.objects.create(mentor=self)
+
 
 class MeetingManager(models.Manager):
     def get_queryset(self):
