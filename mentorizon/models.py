@@ -76,7 +76,7 @@ class Meeting(models.Model):
         return reverse("mentorizon:meeting-detail", kwargs={"pk": self.pk})
 
 
-class MentorSessionModel(models.Manager):
+class MentorSessionManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(
             meeting__date__gt=timezone.now()
@@ -94,7 +94,7 @@ class MentorSession(models.Model):
         on_delete=models.CASCADE,
         related_name="mentor_session"
     )
-    objects = MentorSessionModel()
+    objects = MentorSessionManager()
 
     def __str__(self) -> str:
         return (
