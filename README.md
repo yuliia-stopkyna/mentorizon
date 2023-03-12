@@ -13,7 +13,7 @@ It is a service where a user can be both a mentor and a mentee, create meetings,
 * users can search spheres by name.
 
 ## DB structure
-![](C:\Users\38095\Desktop\DS\PYprojects\mentor_service\mentorizon_db.jpg)
+![](mentorizon_db.jpg)
 
 ## Main page example
-![](C:\Users\38095\Desktop\DS\PYprojects\mentor_service\index_page.png)
+![](index_page.png)
