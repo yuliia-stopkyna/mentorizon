@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1 class="text-center fw-bold display-4 m-5">Oops, this page not found.</h1>
+  <p class="text-center"><i class="bi bi-exclamation-diamond-fill display-1"></i></p>
+  <p class="text-center display-6">
+    Return to the <a href="{% url 'mentorizon:index' %}" class="text-decoration-none">
+    main page</a>.
+  </p>
+
+{% endblock %}

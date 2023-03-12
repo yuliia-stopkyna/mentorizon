@@ -1,0 +1,25 @@
+{% extends "registration/base_registration.html" %}
+{% load bootstrap5 %}
+{% block content %}
+  <div class="container my-5 p-5 rounded shadow bg-white w-75">
+    <h1 class="text-center display-4">Update your account</h1>
+    <div class="row justify-content-center">
+      <div class="col">
+        <form method="post" action="">
+        {% csrf_token %}
+          {% bootstrap_field form.first_name %}
+          {% bootstrap_field form.last_name %}
+          {% bootstrap_field form.email %}
+          {% bootstrap_field form.mentor_sphere %}
+          <a href="{% url 'mentorizon:sphere-create' %}"><button type="button" class="btn btn-success">
+            Create sphere
+          </button></a>
+          {% bootstrap_field form.years_of_experience %}
+          {% bootstrap_field form.experience_description %}
+          <input type="submit" value="Update" class="btn btn-primary" />
+          <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

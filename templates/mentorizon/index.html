@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="text-center display-1 p-3 fw-bold">Mentorizon</h1>
+  <p class="text-center mb-4 mx-2 fs-1">
+    The place where you can be both a mentor and a mentee.
+    <br>
+    Broaden your horizons.
+  </p>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-8 m-2 p-2 py-5 col-md-3 bg-white rounded shadow index-card">
+        <a href="{% url 'mentorizon:mentor-list' %}" class="text-decoration-none text-body">
+          <p class="text-center fw-bold display-1 text-primary">{{ num_mentors }}</p>
+        <p class="text-center display-6">mentors</p>
+        </a>
+      </div>
+      <div class="col-8 m-2 p-2 py-5 col-md-3 bg-white rounded shadow index-card">
+        <a href="{%  url 'mentorizon:meeting-list' %}" class="text-decoration-none text-body">
+          <p class="text-center fw-bold display-1 text-primary">{{ num_meetings }}</p>
+          <p class="text-center display-6">meeting{{ num_meetings|pluralize }}</p>
+        </a>
+      </div>
+      <div class="col-8 m-2 p-3 py-5 col-md-3 bg-white rounded shadow index-card">
+        <a href="{% url 'mentorizon:sphere-list' %}" class="text-decoration-none text-body">
+          <p class="text-center fw-bold display-1 text-primary">{{ num_spheres }}</p>
+          <p class="text-center display-6">spheres</p>
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
