@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
 
-from mentorizon.models import Sphere, Meeting, MentorSession, Rating
+from mentorizon.models import Meeting, MentorSession, Rating, Sphere
 
 
 class SphereModelTest(TestCase):

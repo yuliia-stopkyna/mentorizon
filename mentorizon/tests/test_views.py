@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from mentorizon.models import Sphere, Meeting, MentorSession
+from mentorizon.models import Meeting, MentorSession, Sphere
 
 
 class PrivateTests(TestCase):

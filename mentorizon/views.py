@@ -9,21 +9,21 @@ from django.views import generic
 from django.shortcuts import render, get_object_or_404
 
 from mentorizon.forms import (
-    UserCreateForm,
-    UserUpdateForm,
     MeetingCreateForm,
-    MeetingUpdateForm,
     MeetingSearchForm,
+    MeetingUpdateForm,
     MentorSearchForm,
     SphereCreateForm,
     SphereFilterForm,
-    SphereSearchForm
+    SphereSearchForm,
+    UserCreateForm,
+    UserUpdateForm,
 )
 from mentorizon.models import (
     Meeting,
-    Sphere,
     MentorSession,
-    RatingVote
+    RatingVote,
+    Sphere,
 )
 
 

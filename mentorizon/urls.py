@@ -1,21 +1,21 @@
 from django.urls import path
 
 from mentorizon.views import (
+    book_unbook_meeting_view,
     index,
+    MeetingCreateView,
+    MeetingDeleteView,
+    MeetingDetailView,
+    MeetingListView,
+    MeetingUpdateView,
+    MentorDetailView,
+    MentorListView,
+    rate_mentor_view,
+    SphereCreateView,
+    SphereListView,
     UserCreateView,
     UserDetailView,
     UserUpdateView,
-    MentorListView,
-    MentorDetailView,
-    rate_mentor_view,
-    MeetingListView,
-    MeetingDetailView,
-    book_unbook_meeting_view,
-    MeetingDeleteView,
-    MeetingCreateView,
-    MeetingUpdateView,
-    SphereCreateView,
-    SphereListView,
 )
 
 urlpatterns = [

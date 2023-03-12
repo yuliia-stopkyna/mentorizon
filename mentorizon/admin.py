@@ -2,12 +2,12 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from mentorizon.models import (
-    User,
-    Sphere,
     Meeting,
     MentorSession,
     Rating,
-    RatingVote
+    RatingVote,
+    Sphere,
+    User,
 )
 
 
