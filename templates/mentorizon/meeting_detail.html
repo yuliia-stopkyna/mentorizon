@@ -19,7 +19,7 @@
         <p>{{ meeting.description }}</p>
         {% if user.id != meeting.mentor_session.mentor.id %}
           {% if user not in meeting.participants.all %}
-            {% if meeting.available_places and not full_book_error %}
+            {% if meeting.available_places and not full_book %}
               <p>Available places: {{ meeting.available_places }}</p>
               <a href="{% url 'mentorizon:book-meeting' pk=meeting.id %}" class="inline">
                 <button type="submit" class="btn btn-primary">Book</button>

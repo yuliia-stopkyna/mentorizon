@@ -1,7 +1,14 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from mentorizon.models import User, Sphere, Meeting, MentorSession, Rating, RatingVote
+from mentorizon.models import (
+    User,
+    Sphere,
+    Meeting,
+    MentorSession,
+    Rating,
+    RatingVote
+)
 
 
 @admin.register(User)
@@ -44,7 +51,11 @@ class UserAdmin(UserAdmin):
             ),
         )
     )
-    list_display = UserAdmin.list_display + ("mentor_sphere", "experience_description", "years_of_experience")
+    list_display = UserAdmin.list_display + (
+        "mentor_sphere",
+        "experience_description",
+        "years_of_experience"
+    )
 
 
 @admin.register(Sphere)

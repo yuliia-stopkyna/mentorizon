@@ -16,7 +16,9 @@ class Sphere(models.Model):
             models.UniqueConstraint(
                 Lower("name"),
                 name="name_unique",
-                violation_error_message="Sphere with this name already exists.")
+                violation_error_message="Sphere with this "
+                                        "name already exists."
+            )
         ]
 
     def __str__(self) -> str:
@@ -115,7 +117,11 @@ class Rating(models.Model):
 
 
 class RatingVote(models.Model):
-    rating = models.ForeignKey(Rating, on_delete=models.CASCADE, related_name="rating_votes")
+    rating = models.ForeignKey(
+        Rating,
+        on_delete=models.CASCADE,
+        related_name="rating_votes"
+    )
     voter = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

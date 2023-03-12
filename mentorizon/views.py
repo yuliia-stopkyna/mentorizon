@@ -57,7 +57,9 @@ class UserDetailView(LoginRequiredMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         obj = self.get_object()
-        mentor_meetings = Meeting.objects.select_related("mentor_session").filter(
+        mentor_meetings = Meeting.objects.select_related(
+            "mentor_session"
+        ).filter(
             mentor_session__mentor_id=obj.id
         )
         particip_meetings = Meeting.objects.prefetch_related(
@@ -153,7 +155,7 @@ class MeetingListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         search_form = MeetingSearchForm(self.request.GET)
         sphere_name = self.request.GET.get("name")
-        if search_form .is_valid():
+        if search_form.is_valid():
             self.queryset = self.queryset.filter(
                 topic__icontains=search_form.cleaned_data["topic"]
             )
@@ -174,7 +176,7 @@ class MeetingDetailView(LoginRequiredMixin, generic.DetailView):
 
 
 @login_required
-def book_meeting_view(request, pk):
+def book_unbook_meeting_view(request, pk):
     meeting = get_object_or_404(Meeting, pk=pk)
     participants = meeting.participants.all()
     user = request.user
@@ -193,12 +195,19 @@ def book_meeting_view(request, pk):
                 kwargs={"pk": pk}
             ))
 
-        full_book_error = "Unfortunately, there are no available places."
         context = {
             "meeting": meeting,
-            "full_book_error": full_book_error
+            "full_book": True
         }
-        return render(request, "mentorizon/meeting_detail.html", context=context)
+        return render(
+            request,
+            "mentorizon/meeting_detail.html",
+            context=context
+        )
+
+    return HttpResponseRedirect(
+        reverse("mentorizon:meeting-detail", kwargs={"pk": pk})
+    )
 
 
 class MeetingCreateView(LoginRequiredMixin, generic.CreateView):
@@ -206,12 +215,14 @@ class MeetingCreateView(LoginRequiredMixin, generic.CreateView):
     form_class = MeetingCreateForm
 
     def form_valid(self, form):
-        meeting = Meeting.objects.create(**form.cleaned_data)
-        MentorSession.objects.create(
-            mentor=self.request.user,
-            meeting=meeting
-        )
-        return HttpResponseRedirect(meeting.get_absolute_url())
+        if self.request.user.mentor_sphere is not None:
+            meeting = Meeting.objects.create(**form.cleaned_data)
+            MentorSession.objects.create(
+                mentor=self.request.user,
+                meeting=meeting
+            )
+            return HttpResponseRedirect(meeting.get_absolute_url())
+        return HttpResponseRedirect(reverse("mentorizon:meeting-create"))
 
 
 class MeetingUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -251,7 +262,7 @@ class SphereListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         search_form = SphereSearchForm(self.request.GET)
-        if search_form .is_valid():
+        if search_form.is_valid():
             return self.queryset.filter(
                 name__icontains=search_form.cleaned_data["name"]
             )
