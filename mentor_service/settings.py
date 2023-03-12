@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config(
-    "SECRET_KEY", default="w53k7i6%&uxa=4az#7lk3njawv2$610osz3!9=8=itm0##()$y"
+    "DJANGO_SECRET_KEY", default="w53k7i6%&uxa=4az#7lk3njawv2$610osz3!9=8=itm0##()$y"
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
