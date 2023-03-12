@@ -235,6 +235,14 @@ class MeetingDeleteView(LoginRequiredMixin, generic.DeleteView):
     template_name = "mentorizon/meeting_confirm_delete.html"
     success_url = reverse_lazy("mentorizon:meeting-list")
 
+    def post(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if self.request.user.id == obj.mentor_session.mentor.id:
+            return super().post(request, *args, **kwargs)
+        return HttpResponseRedirect(
+                reverse("mentorizon:meeting-detail", args=[obj.id])
+            )
+
 
 class SphereCreateView(LoginRequiredMixin, generic.CreateView):
     model = Sphere

@@ -281,3 +281,15 @@ class PrivateTests(TestCase):
         )
         with self.assertRaises(ObjectDoesNotExist):
             Meeting.objects.get(pk=4)
+
+    def test_meeting_delete(self):
+        self.client.post(reverse(
+            "mentorizon:meeting-delete", args=[self.meeting2.id]
+        ))
+        self.client.post(reverse(
+            "mentorizon:meeting-delete", args=[self.meeting1.id]
+        ))
+
+        self.assertTrue(Meeting.objects.filter(pk=self.meeting1.id))
+        with self.assertRaises(ObjectDoesNotExist):
+            Meeting.objects.get(pk=self.meeting2.id)
