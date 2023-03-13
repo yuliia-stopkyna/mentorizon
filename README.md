@@ -5,6 +5,12 @@ It is a service where a user can be both a mentor and a mentee, create meetings,
 
 [Mentorizon deployed](https://mentorizon.onrender.com/) on render.com.
 
+You can use these credentials:
+
+_Username: user_
+
+_Password: userpass12345_
+
 ## Features
 
 * user can become a mentor when specifies his/her mentor sphere;
