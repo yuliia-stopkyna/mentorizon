@@ -277,27 +277,27 @@ class SphereListView(LoginRequiredMixin, generic.ListView):
         return self.queryset
 
 
-@login_required
-def rate_mentor_view(request, pk, rate):
-    mentor = get_object_or_404(get_user_model(), pk=pk)
-    user = request.user
-    mentor_votes = RatingVote.objects.filter(
-        rating_id=mentor.rating.id
-    )
-    if user.id != mentor.id:
-        if mentor_votes.filter(voter_id=user.id):
-            mentor_votes.filter(voter_id=user.id).update(rate=rate)
-        else:
-            RatingVote.objects.create(
+class RateMentorView(LoginRequiredMixin, generic.View):
+
+    def post(self, request, *args, **kwargs):
+        mentor = get_object_or_404(get_user_model(), pk=kwargs["pk"])
+        rate = self.request.POST["rate"]
+        voter = self.request.user
+        if voter.id != mentor.id:
+            RatingVote.objects.update_or_create(
                 rating_id=mentor.rating.id,
-                voter=user,
-                rate=rate
+                voter_id=voter.id,
+                defaults={
+                    "rate": rate
+                })
+            return HttpResponseRedirect(
+                reverse_lazy(
+                    "mentorizon:mentor-detail", kwargs={"pk": mentor.id}
+                )
             )
+
         return HttpResponseRedirect(
-            reverse_lazy("mentorizon:mentor-detail", args=[pk])
-        )
-    return HttpResponseRedirect(
-            reverse_lazy("mentorizon:mentor-detail", args=[pk])
+            reverse_lazy("mentorizon:mentor-detail", kwargs={"pk": mentor.id})
         )
 
 

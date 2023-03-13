@@ -4,31 +4,21 @@
   <div class="container-fluid">
     <div class="row justify-content-center">
       <div class="col-10 col-md-8 m-1 my-4 p-3 rounded shadow bg-white">
-        <h1 class="my-3">{{ mentor.first_name }} {{ mentor.last_name }}</h1>
-        <hr>
-        <div class="rate my-3">
-          <a href="{% url 'mentorizon:mentor-rate' pk=mentor.id rate=1 %}"
-             class="text-decoration-none">
-            <button type="submit" class="btn border rate-emoji">😠</button>
-          </a>
-          <a href="{% url 'mentorizon:mentor-rate' pk=mentor.id rate=2 %}"
-             class="text-decoration-none">
-            <button type="submit" class="btn border rate-emoji">☹️</button>
-          </a>
-          <a href="{% url 'mentorizon:mentor-rate' pk=mentor.id rate=3 %}"
-             class="text-decoration-none">
-            <button type="submit" class="btn border rate-emoji">😐</button>
-          </a>
-          <a href="{% url 'mentorizon:mentor-rate' pk=mentor.id rate=4 %}"
-             class="text-decoration-none">
-            <button type="submit" class="btn border rate-emoji">🙂</button>
-          </a>
-          <a href="{% url 'mentorizon:mentor-rate' pk=mentor.id rate=5 %}"
-             class="text-decoration-none">
-            <button type="submit" class="btn border rate-emoji">😍</button>
-          </a>
-        </div>
-
+        {% if user.id == mentor.id %}
+          <h1 class="my-3">{{ mentor.first_name }} {{ mentor.last_name }}</h1>
+          <hr>
+        {% else %}
+          <h1 class="my-3">{{ mentor.first_name }} {{ mentor.last_name }}</h1>
+          <hr>
+          <form action="{% url 'mentorizon:mentor-rate' pk=mentor.id %}" method="post" class="rate my-3">
+            {% csrf_token %}
+              <button type="submit" name="rate" value="1" class="btn border rate-emoji">😠</button>
+              <button type="submit" name="rate" value="2" class="btn border rate-emoji">☹️</button>
+              <button type="submit" name="rate" value="3" class="btn border rate-emoji">😐</button>
+              <button type="submit" name="rate" value="4" class="btn border rate-emoji">🙂</button>
+              <button type="submit" name="rate" value="5" class="btn border rate-emoji">😍</button>
+          </form>
+        {% endif %}
         <p class="fw-bold">Rating: {{ mentor.avg_rating|default_if_none:"0" }}
           ({{ mentor.rating.rating_votes.count }}
           vote{{ mentor.rating.rating_votes.count|pluralize }})
