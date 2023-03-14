@@ -78,24 +78,26 @@ class PrivateTests(TestCase):
         )
 
     def test_user_rating_vote(self):
-        self.client.get(reverse("mentorizon:mentor-rate", kwargs={
-            "pk": self.mentor.id,
-            "rate": 5
-        }))
+        self.client.post(reverse("mentorizon:mentor-rate", kwargs={
+            "pk": self.mentor.id
+        }), data={"rate": 5})
+
         response1 = self.client.get(
             reverse("mentorizon:mentor-detail", kwargs={"pk": self.mentor.id})
         )
-        self.client.get(reverse("mentorizon:mentor-rate", kwargs={
-            "pk": self.user.id,
-            "rate": 5
-        }))
+
+        self.client.post(reverse("mentorizon:mentor-rate", kwargs={
+            "pk": self.user.id
+        }), data={"rate": 5})
+
         response2 = self.client.get(
             reverse("mentorizon:mentor-detail", kwargs={"pk": self.user.id})
         )
-        self.client.get(reverse("mentorizon:mentor-rate", kwargs={
-            "pk": self.mentor.id,
-            "rate": 4
-        }))
+
+        self.client.post(reverse("mentorizon:mentor-rate", kwargs={
+            "pk": self.mentor.id
+        }), data={"rate": 4})
+
         response3 = self.client.get(
             reverse("mentorizon:mentor-detail", kwargs={"pk": self.mentor.id})
         )
@@ -110,7 +112,7 @@ class PrivateTests(TestCase):
                 "pk": self.meeting1.id
             })
         )
-        self.client.get(reverse("mentorizon:book-meeting", kwargs={
+        self.client.post(reverse("mentorizon:book-meeting", kwargs={
             "pk": self.meeting1.id
         }))
         response2 = self.client.get(

@@ -1,7 +1,7 @@
 from django.urls import path
 
 from mentorizon.views import (
-    book_unbook_meeting_view,
+    BookMeetingView,
     index,
     MeetingCreateView,
     MeetingDeleteView,
@@ -10,7 +10,7 @@ from mentorizon.views import (
     MeetingUpdateView,
     MentorDetailView,
     MentorListView,
-    rate_mentor_view,
+    RateMentorView,
     SphereCreateView,
     SphereListView,
     UserCreateView,
@@ -38,7 +38,9 @@ urlpatterns = [
         "meeting/<int:pk>/", MeetingDetailView.as_view(), name="meeting-detail"
     ),
     path(
-        "meeting/<int:pk>/book/", book_unbook_meeting_view, name="book-meeting"
+        "meeting/<int:pk>/book/",
+        BookMeetingView.as_view(),
+        name="book-meeting"
     ),
     path(
         "meeting/create/",
@@ -57,8 +59,8 @@ urlpatterns = [
     ),
     path("sphere/create/", SphereCreateView.as_view(), name="sphere-create"),
     path(
-        "mentor/<int:pk>/rate/<int:rate>",
-        rate_mentor_view,
+        "mentor/<int:pk>/rate/",
+        RateMentorView.as_view(),
         name="mentor-rate"
     ),
     path("spheres/", SphereListView.as_view(), name="sphere-list")

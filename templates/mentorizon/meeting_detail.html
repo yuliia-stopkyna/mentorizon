@@ -19,11 +19,12 @@
         <p>{{ meeting.description }}</p>
         {% if user.id != meeting.mentor_session.mentor.id %}
           {% if user not in meeting.participants.all %}
-            {% if meeting.available_places and not full_book %}
+            {% if meeting.available_places %}
               <p>Available places: {{ meeting.available_places }}</p>
-              <a href="{% url 'mentorizon:book-meeting' pk=meeting.id %}" class="inline">
+              <form action="{% url 'mentorizon:book-meeting' pk=meeting.id %}" method="post" class="inline">
+              {% csrf_token %}
                 <button type="submit" class="btn btn-primary">Book</button>
-              </a>
+              </form>
             {% else %}
               <p>No available places.</p>
             {% endif %}
@@ -35,9 +36,11 @@
             <a href="{{ meeting.link }}" target="_blank" class="text-decoration-none">
               <button type="button" class="btn btn-success">Link</button>
             </a>
-            <a href="{% url 'mentorizon:book-meeting' pk=meeting.id %}" class="inline">
+            <form action="{% url 'mentorizon:book-meeting' pk=meeting.id %}" method="post" class="btn p-0">
+            {% csrf_token %}
               <button type="submit" class="btn btn-danger">Unbook</button>
-            </a>
+            </form>
+
           {% endif %}
         {% else %}
           <span class="badge bg-success position-absolute top-0 end-0">

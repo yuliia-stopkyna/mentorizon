@@ -65,10 +65,11 @@
                <a href="{{ meeting.link }}" target="_blank" class="text-decoration-none">
                 <button type="button" class="btn btn-success">Link</button>
                </a>
-               <a href="{% url 'mentorizon:book-meeting' pk=meeting.id %}"
-                  class="text-decoration-none">
+               <form action="{% url 'mentorizon:book-meeting' pk=meeting.id %}" method="post"
+                  class="btn p-0">
+                 {% csrf_token %}
                  <button type="submit" class="btn btn-danger">Unbook</button>
-               </a>
+               </form>
                  <button type="button" class="btn btn-light"><i class="bi bi-eye"></i></button>
              </a>
             </div>
