@@ -112,7 +112,7 @@ class PrivateTests(TestCase):
                 "pk": self.meeting1.id
             })
         )
-        self.client.get(reverse("mentorizon:book-meeting", kwargs={
+        self.client.post(reverse("mentorizon:book-meeting", kwargs={
             "pk": self.meeting1.id
         }))
         response2 = self.client.get(
