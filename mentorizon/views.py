@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.shortcuts import render, get_object_or_404
+from django.views.generic.edit import ProcessFormView
 
 from mentorizon.forms import (
     MeetingCreateForm,
@@ -175,39 +176,40 @@ class MeetingDetailView(LoginRequiredMixin, generic.DetailView):
     )
 
 
-@login_required
-def book_unbook_meeting_view(request, pk):
-    meeting = get_object_or_404(Meeting, pk=pk)
-    participants = meeting.participants.all()
-    user = request.user
-    mentor = meeting.mentor_session.mentor
-    if user is not mentor:
-        if user in participants:
-            meeting.participants.remove(user)
-            return HttpResponseRedirect(reverse(
-                "mentorizon:meeting-detail",
-                kwargs={"pk": pk}
-            ))
-        if len(participants) < meeting.limit_of_participants:
-            meeting.participants.add(user)
-            return HttpResponseRedirect(reverse(
-                "mentorizon:meeting-detail",
-                kwargs={"pk": pk}
-            ))
+class BookMeetingView(LoginRequiredMixin, ProcessFormView):
 
-        context = {
-            "meeting": meeting,
-            "full_book": True
-        }
-        return render(
-            request,
-            "mentorizon/meeting_detail.html",
-            context=context
+    def post(self, request, *args, **kwargs):
+        meeting_id = self.kwargs["pk"]
+        meeting = get_object_or_404(Meeting, pk=meeting_id)
+        participants = meeting.participants.all()
+        user = self.request.user
+        mentor = meeting.mentor_session.mentor
+        if user is not mentor:
+            if user in participants:
+                meeting.participants.remove(user)
+                return HttpResponseRedirect(reverse(
+                    "mentorizon:meeting-detail",
+                    kwargs={"pk": meeting_id}
+                ))
+            if len(participants) < meeting.limit_of_participants:
+                meeting.participants.add(user)
+                return HttpResponseRedirect(reverse(
+                    "mentorizon:meeting-detail",
+                    kwargs={"pk": meeting_id}
+                ))
+
+            return HttpResponseRedirect(
+                reverse_lazy(
+                    "mentorizon:meeting-detail",
+                    kwargs={"pk": meeting_id}
+                )
+            )
+        return HttpResponseRedirect(
+            reverse_lazy(
+                "mentorizon:meeting-detail",
+                kwargs={"pk": meeting_id}
+            )
         )
-
-    return HttpResponseRedirect(
-        reverse("mentorizon:meeting-detail", kwargs={"pk": pk})
-    )
 
 
 class MeetingCreateView(LoginRequiredMixin, generic.CreateView):

@@ -49,19 +49,21 @@
                {% if user not in meeting.participants.all %}
                  <p>Available places: {{ meeting.available_places }}</p>
                  {% if meeting.available_places %}
-                   <a href="{% url 'mentorizon:book-meeting' pk=meeting.id %}"
-                      class="text-decoration-none">
+                   <form action="{% url 'mentorizon:book-meeting' pk=meeting.id %}" method="post"
+                      class="btn p-0">
+                   {% csrf_token %}
                      <button type="submit" class="btn btn-primary">Book</button>
-                   </a>
+                   </form>
                  {% endif %}
                {% else %}
                  <span class="badge bg-primary position-absolute top-0 end-0">
                     You are a participant!
                   </span>
-                 <a href="{% url 'mentorizon:book-meeting' pk=meeting.id %}"
-                    class="text-decoration-none">
+                 <form action="{% url 'mentorizon:book-meeting' pk=meeting.id %}" method="post"
+                    class="btn p-0">
+                 {% csrf_token %}
                    <button type="submit" class="btn btn-danger">Unbook</button>
-                 </a>
+                 </form>
                {% endif %}
              {% else %}
                <p>{{ meeting.participants.count }}
