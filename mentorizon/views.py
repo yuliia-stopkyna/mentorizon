@@ -62,7 +62,7 @@ class UserDetailView(LoginRequiredMixin, generic.DetailView):
             "mentor_session"
         ).filter(
             mentor_session__mentor_id=obj.id
-        )
+        ).annotate(num_participants=Count("participants"))
         particip_meetings = Meeting.objects.prefetch_related(
             "participants"
         ).filter(participants__id=obj.id)
@@ -81,7 +81,7 @@ class MentorListView(LoginRequiredMixin, generic.ListView):
     model = get_user_model()
     queryset = get_user_model().objects.filter(
         mentor_sphere__isnull=False
-    ).prefetch_related(
+    ).select_related("mentor_sphere").prefetch_related(
         "mentor_sessions", "rating"
     ).annotate(
         avg_rating=Round(Avg("rating__rating_votes__rate"), 1)
@@ -138,7 +138,7 @@ class MentorDetailView(LoginRequiredMixin, generic.DetailView):
 class MeetingListView(LoginRequiredMixin, generic.ListView):
     model = Meeting
     queryset = Meeting.objects.select_related(
-        "mentor_session"
+        "mentor_session__mentor__mentor_sphere"
     ).prefetch_related("participants").annotate(
         available_places=F("limit_of_participants") - Count("participants")
     ).order_by("date")

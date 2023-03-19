@@ -32,8 +32,8 @@
                <p class="fw-bold">{{ meeting.topic }}</p>
                <hr>
                <p class="fst-italic">{{ meeting.date|date:"l, d F Y H:i" }}</p>
-               <p>{{ meeting.participants.count }}
-                   participant{{ meeting.participants.count|pluralize }}
+               <p>{{ meeting.num_participants }}
+                   participant{{ meeting.num_participants|pluralize }}
                </p>
                <a href="{% url 'mentorizon:meeting-update' pk=meeting.id %}"
                   class="text-decoration-none">
